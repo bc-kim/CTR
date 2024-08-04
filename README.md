@@ -1,9 +1,9 @@
 # MuJoCo_ExoGlove
 
-#### 1. env setting 
+#### 1. Environment
 `conda create -n mujoco python=3.10`
 
-#### 2. dependency install
+#### 2. Dependencies
 - `pip install mujoco`
 - `pip install mujoco-viewer` (Try `pip install mujoco-python-viewer`, if it doesn't work).
 - `pip install mediapy`
