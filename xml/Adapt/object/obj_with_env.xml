@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mujoco model="Hand">
+    <asset>
+        <texture type="skybox" builtin="gradient" rgb1="0.6 0.6 0.6" rgb2="0 0 0" width="512" height="512" />
+        <texture name="texplane" type="2d" builtin="checker" rgb1=".25 .25 .25" rgb2=".3 .3 .3" width="512" height="512" mark="cross" markrgb=".8 .8 .8" />
+        <material name="matplane" reflectance="0.3" texture="texplane" texrepeat="1 1" texuniform="true" />
+    </asset>
+
+    <worldbody>
+        <geom name="floor" pos="0 0 -0.1" size="0 0 1" type="plane" material="matplane" />
+        <light name="top" pos="0 0 1" />
+    <body name="Object" pos="0.12 0.1 0.0" quat="1 0 0 0">
+        
+        <geom rgba="0.1 0.3 0.7 1" contype="1" conaffinity="1" pos="0 0 -0.05" type="sphere" size="0.05" mass="2" />
+        <geom rgba="0 0.7 0 1" contype="1" conaffinity="1" pos="0 -0.05 -0.01" type="sphere" size="0.04" mass="2" />
+        <geom rgba="0.7 0.2 0 1" contype="1" conaffinity="1" pos="0.03 0 0.03" type="sphere" size="0.06" mass="2" />
+        <geom rgba="0.7 0.2 0.7 1" contype="1" conaffinity="1" pos="0.02 0.05 0.04" type="sphere" size="0.03" mass="2" />
+
+    </body>
+</worldbody>
+        <option gravity="0 0 -1" />
+</mujoco>

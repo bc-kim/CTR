@@ -1,0 +1,225 @@
+<!--
+    Copyright (c) 2024 Byungchul Kim
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+    WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
+    IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+    Created 2024 by Byungchul Kim [https://bc-kim.github.io].
+-->
+
+
+<mujoco model='Hand'>
+    <visual>
+        <rgba haze=".3 .3 .3 1"/>
+    </visual>
+
+    <default>
+        <default class="right_hand">
+            <joint type="hinge" stiffness="1.2278" damping="0.3" armature="1" axis="0 0 1" frictionloss="0.1" limited="true" range="-70 20"/>
+        </default>
+        <default class="right_hand_opposite">
+            <joint range="70 -20"/>
+        </default>
+        <geom friction="1 0.25 0.25" condim="6" solimp="0.9 0.95 0.001 0.9 6" solref ="0.05 1" />
+        <site type="sphere" size="0.001" rgba=".9 .9 .9 0.01"/>
+    </default>
+
+    <asset>
+        <texture type="skybox" builtin="gradient" rgb1="0.6 0.6 0.6" rgb2="0 0 0" width="512" height="512"/>
+        <texture name="texplane" type="2d" builtin="checker" rgb1=".25 .25 .25" rgb2=".3 .3 .3" width="512" height="512" mark="cross" markrgb=".8 .8 .8"/>
+        <material name="matplane" reflectance="0.3" texture="texplane" texrepeat="1 1" texuniform="true"/>
+    </asset>
+
+    <worldbody>
+        <geom name="floor" pos="0 0 -0.1" size="0 0 1" type="plane" material="matplane"/>
+        <light name="top" pos="0 0 1"/>
+        <body name="palm">
+            <body name="Thumb" childclass="right_hand" pos="-0.04 0.03 -0.018" quat="-0.447614 0.656234 0.602303 0.078926">
+                <geom name="Thumb_Base" contype="2" conaffinity="1" type="capsule" size="0.015 0.05" quat="1 0 1 0" rgba="1 1 1 0.3"/>
+                <body name="Thumb_PP" pos="0.1 0 0.017" quat="-0.984808 0.000000 0.173648 0.000000">
+                    <geom name="Thumb_Proximal_phal" contype="2" conaffinity="1" type="capsule" size="0.015 0.053" quat="1 0 1 0" rgba="1 1 1 0.3"/>
+                    <!--MCP joint-->
+                    <joint name="Thumb_MCP_J_FE" pos="-0.05 0 0" stiffness="100" armature="0.1" range="25 26"/>
+                    <body name="Thumb_MP" pos="0.095 0 0" quat="1 0 0 0">
+                        <geom name="Thumb_MP_geom" contype="2" conaffinity="1" type="capsule" size="0.015 0.04" quat="1 0 1 0" rgba="1 1 1 0.3"/>
+                        <!--PIP joint-->
+                        <joint name="Thumb_PIP_J" pos="-0.04 -0.003 0" stiffness="100" armature="0.1" range="25 26"/>
+                        <body name="Thumb_DP" pos="0.08 0.003 0">
+                            <geom name="Thumb_DP_geom" contype="2" conaffinity="1" type="capsule" size="0.015 0.035" quat="1 0 1 0" rgba="1 1 1 0.3"/>
+                            <!--DIP joint-->
+                            <joint name="Thumb_DIP_J" pos="-0.03 0 0" stiffness="100" armature="0.1" range="25 26"/>
+                        </body>
+                    </body>
+                </body>
+            </body>
+            <body name="Index" childclass="right_hand" pos="0 0 0" quat="0.000000 0.996195 0.000000 0.087156">
+                <geom name="I_Base" contype="2" conaffinity="1" type="capsule" size="0.015 0.072" quat="1 0 1 0" rgba="1 1 1 0.5" mass="10"/>
+                <!--Below geom represents the blue joint like structure. Used to route the tendon-->
+                <geom name="I_MCP_geom" contype="4" conaffinity="4" type="cylinder" size="0.01 0.03" pos="0 0 0" rgba="0 0 1 0.01" mass="0"/>
+                <!--Below sites are for tendon routing-->
+                <site name="TR_I_init_ext" pos="-0.05 0.01 0"/>
+                <site name="I_initial_flex" pos="-0.05 -0.01 0"/>
+                <site name="I_r1_in" pos="0.02 0.01 0"/>
+                <site name="I_r1_in_flex" pos="0.02 -0.01 0"/>
+                <site name="I_MCP_sidesite" pos="0.07 0.03 0"/>
+                <site name="I_MCP_sidesite_flex" pos="0.07 -0.03 0"/>
+                <!--Metacarpal start-->
+                <body name="I_PP" pos="0.12 0 0" quat="1 0 0 0">
+                    <geom name="I_Proximal_phal" contype="2" conaffinity="1" type="capsule" size="0.0145 0.045" quat="1 0 1 0" rgba="1 1 1 0.3" mass="0.004"/>
+                    <geom name="I_PIP_geom" contype="4" conaffinity="4" type="cylinder" size="0.01 0.03" pos="0.05 0 0" rgba="0 0 1 0.01" mass="0"/>
+                    <joint name="I_MCP_J_FE" pos="-0.045 0 0" stiffness="1.39626" armature="0.1"/>
+                    <site name="I_r1_out" pos="-0.02 0.0145 0"/>
+                    <site name="I_r2_in" pos="0.02 0.0145 0"/>
+                    <site name="I_PIP_sidesite" pos="0.07 0.045 0"/>
+                    <site name="I_r1_out_flex" pos="-0.02 -0.0145 0"/>
+                    <site name="I_r2_in_flex" pos="0.02 -0.0145 0"/>
+                    <site name="I_PIP_sidesite_flex" pos="0.07 -0.045 0"/>
+                    <body name="I_MP" pos="0.07 0 0" quat="1 0 0 0">
+                        <geom name="I_MP_geom" contype="2" conaffinity="1" type="capsule" size="0.014 0.024" quat="1 0 1 0" rgba="1 1 1 0.3" mass="0.003"/>
+                        <geom name="I_DIP_geom" contype="4" conaffinity="4" type="cylinder" size="0.01 0.03" pos="0.05 0 0" rgba="0 0 1 0.01" mass="0"/>
+                        <joint name="I_PIP_J" pos="-0.024 0 0" stiffness="1.39626" armature="0.1"/>
+                        <site name="I_r2_out" pos="-0.02 0.014 0"/>
+                        <site name="I_r3_in" pos="0.02 0.014 0"/>
+                        <site name="I_DIP_sidesite" pos="0.07 0.045 0"/>
+                        <site name="I_r2_out_flex" pos="-0.02 -0.014 0"/>
+                        <site name="I_r3_in_flex" pos="0.02 -0.014 0"/>
+                        <site name="I_DIP_sidesite_flex" pos="0.07 -0.045 0"/>
+                        <body name="I_DP" pos="0.05 0 0">
+                            <geom name="I_DP_geom" contype="2" conaffinity="1" type="capsule" size="0.013 0.024" quat="1 0 1 0" rgba="1 1 1 0.3" mass="0.002"/>
+                            <joint name="I_DIP_J" pos="-0.024 0 0" stiffness="1.39626" armature="0.1"/>
+                            <site name="I_r3_out" pos="-0.02 0.013 0"/>
+                            <site name="I_r3_out_flex" pos="-0.02 -0.013 0"/>
+                        </body>
+                    </body>
+                </body>
+            </body>
+            <body name="Middle" childclass="right_hand_opposite" pos="0 0 -0.05" quat="1 0 0 0">
+                <geom name="Middle_Base" contype="2" conaffinity="1" type="capsule" size="0.015 0.075" quat="1 0 1 0" rgba="1 1 1 0.5" mass="10"/>
+                <geom name="Middle_MCP_geom" contype="4" conaffinity="4" type="cylinder" size="0.01 0.03" pos="0.05 0 0" rgba="0 0 1 0.01" mass="0"/>
+                <site name="Middle_initial" pos="-0.05 0.01 0"/>
+                <site name="Middle_initial_ext" pos="-0.05 -0.01 0"/>
+                <site name="Middle_r1_in" pos="0.02 0.01 0"/>
+                <site name="Middle_r1_in_flex" pos="0.02 -0.01 0"/>
+                <site name="Middle_MCP_sidesite" pos="0.07 0.03 0"/>
+                <site name="Middle_MCP_sidesite_flex" pos="0.07 -0.03 0"/>
+                <body name="Middle_PP" pos="0.13 0 0" quat="1 0 0 0">
+                    <geom name="Middle_Proximal_phal" contype="2" conaffinity="1" mass="0.004" type="capsule" size="0.014 0.051" quat="1 0 1 0" rgba="1 1 1 0.3"/>
+                    <geom name="Middle_PIP_geom" contype="4" conaffinity="4" type="cylinder" size="0.01 0.03" pos="0.05 0 0" rgba="0 0 1 0.01" mass="0"/>
+                    <joint name="Middle_MCP_J_FE" pos="-0.051 0 0" stiffness="1.39626" armature="0.1"/>
+                    <site name="Middle_r1_out" pos="-0.02 0.014 0"/>
+                    <site name="Middle_r2_in" pos="0.02 0.014 0"/>
+                    <site name="Middle_PIP_sidesite" pos="0.07 0.045 0"/>
+                    <site name="Middle_r1_out_flex" pos="-0.02 -0.014 0"/>
+                    <site name="Middle_r2_in_flex" pos="0.02 -0.014 0"/>
+                    <site name="Middle_PIP_sidesite_flex" pos="0.07 -0.045 0"/>
+                    <body name="Middle_MP" pos="0.085 0 0" quat="1 0 0 0">
+                        <geom name="Middle_MP_geom" contype="2" conaffinity="1" mass="0.003" type="capsule" size="0.013 0.031" quat="1 0 1 0" rgba="1 1 1 0.3"/>
+                        <geom name="Middle_DIP_geom" contype="4" conaffinity="4" type="cylinder" size="0.01 0.03" pos="0.05 0 0" rgba="0 0 1 0.01" mass="0"/>
+                        <joint name="Middle_PIP_J" pos="-0.031 0 0" stiffness="1.39626" armature="0.1"/>
+                        <site name="Middle_r2_out" pos="-0.02 0.013 0"/>
+                        <site name="Middle_r3_in" pos="0.02 0.013 0"/>
+                        <site name="Middle_DIP_sidesite" pos="0.07 0.045 0"/>
+                        <site name="Middle_r2_out_flex" pos="-0.02 -0.013 0"/>
+                        <site name="Middle_r3_in_flex" pos="0.02 -0.013 0"/>
+                        <site name="Middle_DIP_sidesite_flex" pos="0.07 -0.045 0"/>
+                        <body name="Middle_DP" pos="0.062 0 0">
+                            <geom name="Middle_DP_geom" contype="2" conaffinity="1" mass="0.002" type="capsule" size="0.012 0.028" quat="1 0 1 0" rgba="1 1 1 0.3"/>
+                            <joint name="Middle_DIP_J" pos="-0.028 0 0" stiffness="1.39626" armature="0.1"/>
+                            <site name="Middle_r3_out" pos="-0.02 0.012 0"/>
+                            <site name="Middle_r3_out_flex" pos="-0.02 -0.012 0"/>
+                        </body>
+                    </body>
+                </body>
+            </body>
+        </body>
+    </worldbody>
+    <tendon>
+        <spatial name="I_ext" width="0.001" limited="false" rgba=".95 .3 .3 1">
+            <site site="TR_I_init_ext"/>
+            <site site="I_r1_in"/>
+            <geom geom="I_MCP_geom" sidesite="I_MCP_sidesite"/>
+            <site site="I_r1_out"/>
+            <site site="I_r2_in"/>
+            <geom geom="I_PIP_geom" sidesite="I_PIP_sidesite"/>
+            <site site="I_r2_out"/>
+            <site site="I_r3_in"/>
+            <geom geom="I_DIP_geom" sidesite="I_DIP_sidesite"/>
+            <site site="I_r3_out"/>
+        </spatial>
+    </tendon>
+    <tendon>
+        <spatial name="I_flex" width="0.001" limited="false" rgba=".95 .3 .3 1">
+            <site site="I_initial_flex"/>
+            <site site="I_r1_in_flex"/>
+            <geom geom="I_MCP_geom" sidesite="I_MCP_sidesite_flex"/>
+            <site site="I_r1_out_flex"/>
+            <site site="I_r2_in_flex"/>
+            <geom geom="I_PIP_geom" sidesite="I_PIP_sidesite_flex"/>
+            <site site="I_r2_out_flex"/>
+            <site site="I_r3_in_flex"/>
+            <geom geom="I_DIP_geom" sidesite="I_DIP_sidesite_flex"/>
+            <site site="I_r3_out_flex"/>
+        </spatial>
+    </tendon>
+    <tendon>
+        <spatial name="M_ext" width="0.001" limited="false" rgba=".95 .3 .3 1">
+            <site site="Middle_initial_ext"/>
+            <site site="Middle_r1_in_flex"/>
+            <geom geom="Middle_MCP_geom" sidesite="Middle_MCP_sidesite_flex"/>
+            <site site="Middle_r1_out_flex"/>
+            <site site="Middle_r2_in_flex"/>
+            <geom geom="Middle_PIP_geom" sidesite="Middle_PIP_sidesite_flex"/>
+            <site site="Middle_r2_out_flex"/>
+            <site site="Middle_r3_in_flex"/>
+            <geom geom="Middle_DIP_geom" sidesite="Middle_DIP_sidesite_flex"/>
+            <site site="Middle_r3_out_flex"/>
+        </spatial>
+    </tendon>
+
+    <tendon>
+        <spatial name="M_flex" width="0.001" limited="false" rgba=".95 .3 .3 1">
+            <site site="Middle_initial"/>
+            <site site="Middle_r1_in"/>
+            <geom geom="Middle_MCP_geom" sidesite="Middle_MCP_sidesite"/>
+            <site site="Middle_r1_out"/>
+            <site site="Middle_r2_in"/>
+            <geom geom="Middle_PIP_geom" sidesite="Middle_PIP_sidesite"/>
+            <site site="Middle_r2_out"/>
+            <site site="Middle_r3_in"/>
+            <geom geom="Middle_DIP_geom" sidesite="Middle_DIP_sidesite"/>
+            <site site="Middle_r3_out"/>
+        </spatial>
+    </tendon>
+
+    <actuator>
+        <motor ctrllimited="true" ctrlrange="-20.0 1.0" tendon="I_flex" gear="200.0"/>
+    </actuator>
+    <actuator>
+        <motor ctrllimited="true" ctrlrange="-20.0 1.0" tendon="M_flex" gear="200.0"/>
+    </actuator>
+    <actuator>
+        <motor ctrllimited="true" ctrlrange="-20.0 1.0" tendon="I_ext" gear="200.0"/>
+    </actuator>
+    <actuator>
+        <motor ctrllimited="true" ctrlrange="-20.0 1.0" tendon="M_ext" gear="200.0"/>
+    </actuator>
+
+    <equality>
+        <tendon tendon1="I_flex" tendon2="M_flex"/>
+    </equality>
+    <option gravity="0 0 -1"/>
+</mujoco>

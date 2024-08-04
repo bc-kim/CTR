@@ -1,0 +1,7 @@
+<mujoco>
+    <body name="Object" pos="0.2 0.14 0.0" quat="0.500000 0.000000 0.000000 0.866025">--&gt;
+        
+        <geom rgba="0.1 0.3 0.7 1" contype="1" conaffinity="1" pos="0 0 -0.01" type="box" size="0.060 0.10 0.09" mass="0.5" />
+        <joint type="free" />
+    </body>
+</mujoco>

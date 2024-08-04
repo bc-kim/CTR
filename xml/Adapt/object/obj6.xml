@@ -1,0 +1,9 @@
+<mujoco>
+    <body name="Object" pos="0.12 0.1 0.0" quat="1 0 0 0">
+        <!-- radius/height -->
+        <geom rgba="0.1 0.3 0.7 1" contype="1" conaffinity="1" pos="0 0.01 -0.04" type="cylinder" size="0.06 0.06" mass="3"/>
+        <geom rgba="0 0.7 0 1" contype="1" conaffinity="1" pos="0 0.03 0.02" type="cylinder" size="0.08 0.02" mass="3"/>
+        <geom rgba="0.7 0.2 0 1" contype="1" conaffinity="1" pos="0.02 0 0.03" type="cylinder" size="0.07 0.06" mass="3"/>
+        <joint type="free"/>
+    </body>
+</mujoco>
