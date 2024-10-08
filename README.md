@@ -18,7 +18,7 @@
 - Version (6/29/2024): mujoco (3.1.6), mujoco-python-viewer (0.1.4), mediapy(1.2.2)
 
 #### Other useful commands
-- 'python -m mujoco.viewer' to see the mujoco viewer.
+- `python -m mujoco.viewer` to see the mujoco viewer.
 
 #### Bibtex
 ``` bibtex
