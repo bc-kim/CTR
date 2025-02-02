@@ -12,7 +12,7 @@
 
 #### Dependencies
 - `pip install mujoco`
-- `pip install mujoco-viewer` (Try `pip install mujoco-python-viewer`, if it doesn't work).
+- `pip install mujoco-python-viewer`
 - `pip install mediapy`
 
 - Version (6/29/2024): mujoco (3.1.6), mujoco-python-viewer (0.1.4), mediapy(1.2.2)
